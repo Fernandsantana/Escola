@@ -33,6 +33,8 @@ namespace Escola
                     config.AccessDeniedPath = "/Home";
                     config.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +64,7 @@ namespace Escola
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Login}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -55,7 +55,10 @@ namespace Escola.Controllers
                 return Json(new { Msg = "Usuário logado com sucesso" });
             }
 
+            await sqlConnection.CloseAsync();
+
             return Json(new { Msg = "Usuário não encontrado" });
+           
         }
 
         public async Task<IActionResult> Logout()
