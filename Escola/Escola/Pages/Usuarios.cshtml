@@ -3,8 +3,24 @@
 @{
 }
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="">Escola</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a asp-page="/Index" asp-page-handler="Logout" class="nav-link">Deslogar</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 @if (Model.Usuarios.Any())
 {
+
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
@@ -16,11 +32,11 @@
         @foreach (var usuario in Model.Usuarios)
          {
             <tr>
-                <td>@usuario.Id</td>
+                <td>@usuario.UsuarioId</td>
                 <td>@usuario.Nome</td>
                 <td>
-                    <a asp-page="/Editar" asp-route-Id="@usuario.Id" class="btn btn-warning">Editar</a>
-                    <a asp-page="/Editar" asp-page-handler="Remover" asp-route-Id="@usuario.Id" class="btn btn-danger">Excluir</a>
+                    <a asp-page="/Editar" asp-route-Id="@usuario.UsuarioId" class="btn btn-warning">Editar</a>
+                    <a asp-page="/Remover" asp-route-Id="@usuario.UsuarioId" class="btn btn-danger">Excluir</a>
                 </td>
             </tr>
          }

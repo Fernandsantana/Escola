@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Escola.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,37 +11,25 @@ namespace Escola.Pages
 {
     public class UsuariosModel : PageModel
     {
-        public List<UsuarioViewModel> Usuarios { get; set; }
+        public List<Usuario> Usuarios { get; set; }
 
-        public async Task OnGet()
+        private readonly Contexto _contexto;
+
+        public UsuariosModel(Contexto contexto)
         {
-            SqlConnection sqlConnection = new SqlConnection("Server=(localdb)\\mssqllocaldb;Database=EscolaDB;");
-            await sqlConnection.OpenAsync();
+            _contexto = contexto;
+        }
 
-            SqlCommand sqlCommand = sqlConnection.CreateCommand();
-            sqlCommand.CommandText = $"SELECT * FROM usuarios";
-
-            SqlDataReader reader = sqlCommand.ExecuteReader();
-
-            Usuarios = new List<UsuarioViewModel>();
-
-            while (await reader.ReadAsync())
+        public IActionResult OnGet()
+        {
+            if (!User.Identity.IsAuthenticated)
             {
-                Usuarios.Add(new UsuarioViewModel
-                {
-                    Id = reader.GetInt32(0),
-                    Nome = reader.GetString(1)
-                }); 
+               return Redirect("Index");
             }
 
-            await sqlConnection.CloseAsync();
+            Usuarios = _contexto.Usuarios.ToList();
+
+            return Page();
         }
-    }
-
-    public class UsuarioViewModel
-    {
-        public int Id { get; set; }
-
-        public string Nome { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,14 +24,16 @@ namespace Escola
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Contexto>(opcoes => opcoes.UseSqlServer(Configuration.GetConnectionString("ConexaoDB")));
+
             services.AddControllersWithViews();
 
             services.AddAuthentication("Identity.Login")
                 .AddCookie("Identity.Login", config =>
                 {
                     config.Cookie.Name = "Identity.Login";
-                    config.LoginPath = "/Login";
-                    config.AccessDeniedPath = "/Home";
+                    config.LoginPath = "/Index";
+                    config.AccessDeniedPath = "/Index";
                     config.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });
 
@@ -63,7 +66,7 @@ namespace Escola
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Login}/{action=Index}/{id?}");
+                    pattern: "{pages=Index}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

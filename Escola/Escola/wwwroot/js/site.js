@@ -12,7 +12,7 @@ function Falha(data) {
     Swal.fire({
         position: 'top-end',
         icon: 'error',
-        title: 'Falhou',
+        title: data.msg,
         showConfirmButton: false,
         timer: 1500
     })

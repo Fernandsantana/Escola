@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Escola.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,24 +21,24 @@ namespace Escola.Pages
         [DataType(DataType.Password)]
         public string Senha { get; set; }
 
+        private readonly Contexto _contexto;
+
+        public CadastrarModel(Contexto contexto)
+        {
+            _contexto = contexto;
+        }
+
         public void OnGet()
         {
 
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            SqlConnection sqlConnection = new SqlConnection("Server=(localdb)\\mssqllocaldb;Database=EscolaDB;");
-            await sqlConnection.OpenAsync();
+            _contexto.Add(new Usuario { Nome = Nome, Senha = Senha });
+            _contexto.SaveChanges();
 
-            SqlCommand sqlCommand = sqlConnection.CreateCommand();
-            sqlCommand.CommandText = $"INSERT INTO usuarios (nome,senha) VALUES ('{Nome}','{Senha}')";
-
-            await sqlCommand.ExecuteReaderAsync();
-
-            await sqlConnection.CloseAsync();
-
-            return new JsonResult(new { Msg = "Usuário cadastrado com sucesso!" });
+            return new JsonResult(new { Msg = "Usuário cadastrado com sucesso!", Url = Url.Page("Index") });
         }
     }
 }
